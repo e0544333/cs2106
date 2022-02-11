@@ -5,4 +5,18 @@
 
 // Place function prototypes here.
 
+void enq(double);
 
+double deq();
+
+void sum(double);
+
+void prod(double);
+
+void clear_sum();
+
+void clear_prod();
+
+double reduce();
+
+double flex_reduce(void(*c)(), void(*o)());
