@@ -11,28 +11,30 @@ functions useful.
 
   ------------------------------------------------------------------------- */
 
-// Searches for the node containing "name" in the tree whose root is at "root", 
-// returning both the node ifself in "node", and its parent in "prevnode" 
+// Searches for the node containing "name" in the tree whose root is at "root",
+// returning both the node ifself in "node", and its parent in "prevnode"
 // (useful for deleting node). Both "node" and "prevnode" are set to NULL
 // if name is not found in the tree.
 
-void findNode(char *name, TTreeNode *root, TTreeNode **node, TTreeNode **prevnode) {
+void findNode(char *name, TTreeNode *root, TTreeNode **node, TTreeNode **prevnode)
+{
 
     TTreeNode *trav = root;
     TTreeNode *prev = NULL;
 
-    while(trav != NULL) {
+    while (trav != NULL)
+    {
         int cmp = strcmp(trav->name, name);
 
-        if(cmp == 0)
+        if (cmp == 0)
         {
             *node = trav;
             *prevnode = prev;
             return;
         }
-        
+
         prev = trav;
-        if(cmp < 0)
+        if (cmp < 0)
             trav = trav->right;
         else
             trav = trav->left;
@@ -45,14 +47,15 @@ void findNode(char *name, TTreeNode *root, TTreeNode **node, TTreeNode **prevnod
 // Searches for the node with the smallest value ("smallest node") in the tree originating at "node".
 // Returns the smallest node and its parent in "smallest_node" and "parent"
 // respectively.
-void findSmallest(TTreeNode *node, TTreeNode **smallest_node, TTreeNode **parent) {
+void findSmallest(TTreeNode *node, TTreeNode **smallest_node, TTreeNode **parent)
+{
     TTreeNode *trav = node;
     TTreeNode *prev = NULL;
 
-    if(trav == NULL)
+    if (trav == NULL)
         return;
 
-    while(trav->left != NULL)
+    while (trav->left != NULL)
     {
         prev = trav;
         trav = trav->left;
@@ -63,9 +66,11 @@ void findSmallest(TTreeNode *node, TTreeNode **smallest_node, TTreeNode **parent
 }
 
 // Delete a node at "node" with parent node "prevnode"
-void delNode(TTreeNode *node, TTreeNode *prevnode) {
+void delNode(TTreeNode *node, TTreeNode *prevnode)
+{
     // This is a leaf node
-    if(node->left == NULL && node->right == NULL) {
+    if (node->left == NULL && node->right == NULL)
+    {
         // See whether node is on parent's left or right, and NULL the
         // corresponding pointer
 
@@ -73,7 +78,7 @@ void delNode(TTreeNode *node, TTreeNode *prevnode) {
 
         // Previous node is smaller than this one. This
         // node is on the right
-        if(cmp < 0) 
+        if (cmp < 0)
             prevnode->right = NULL;
         else
             prevnode->left = NULL;
@@ -84,7 +89,8 @@ void delNode(TTreeNode *node, TTreeNode *prevnode) {
     }
 
     // This has a child on the left only
-    if(node->right == NULL) {
+    if (node->right == NULL)
+    {
         // Copy the right child over
         node = node->left;
         freenode(node->left);
@@ -92,7 +98,8 @@ void delNode(TTreeNode *node, TTreeNode *prevnode) {
     }
 
     // This has a child on the right only
-    if(node->left == NULL) {
+    if (node->left == NULL)
+    {
         node = node->right;
         freenode(node->right);
         return;
@@ -106,36 +113,82 @@ void delNode(TTreeNode *node, TTreeNode *prevnode) {
     freenode(smallest);
 }
 
-
 /* ---------------------------- IMPLEMENT THESE --------------------------- */
 
-// Create a new node with name set to "name" and
-// phoneNum set to "phoneNum".
-void delTree(TTreeNode *root) {
-    // Implement deleting the entire tree, whose
-    // root is at "root".
+void delTree(TTreeNode *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    // Similar to tree traversal
+    delTree(root->left);
+    delTree(root->right);
+    freenode(root);
 }
 
-TTreeNode *makeNewNode(char *name, char *phoneNum) {
-    // Implement makeNewNode to create a new
-    // TTreeNode containing name and phoneNum
+TTreeNode *makeNewNode(char *name, char *phoneNum)
+{
+    TTreeNode *n = (TTreeNode *)malloc(sizeof(TTreeNode));
+    n->name = (char *)malloc(strlen(name) + 1);
+    strcpy(n->name, name);
+    strcpy(n->phoneNum, phoneNum);
+
+    n->left = NULL;
+    n->right = NULL;
+
+    return n;
 }
 
-// Add a new node to the tree. 
-// Note that "root" is a POINTER to the tree's root,
-// not the root itself.
+void addNode(TTreeNode **root, TTreeNode *node)
+{
 
-void addNode(TTreeNode **root, TTreeNode *node) {
+    if (*root == NULL)
+        *root = node;
+    else
+    {
 
-    // Add a new node to the tree, where root is
-    // the POINTER to the tree's root.
+        TTreeNode *trav = *root;
+
+        while (trav != NULL)
+        {
+            int cmp = strcmp(trav->name, node->name);
+
+            if (cmp < 0)
+                if (trav->right == NULL)
+                {
+                    trav->right = node;
+                    break;
+                }
+                else
+                    trav = trav->right;
+            else if (trav->left == NULL)
+            {
+
+                trav->left = node;
+                break;
+            }
+            else
+                trav = trav->left;
+        }
+    }
 }
 
-void freenode(TTreeNode *node) {
-    // Frees the memory used by node.
+void freenode(TTreeNode *node)
+{
+    free(node->name);
+    free(node);
+    node = NULL;
 }
 
-void print_inorder(TTreeNode *node) {
-    // Implement in-order printing of the tree
-    // Recursion is probably best here.
+void print_inorder(TTreeNode *node)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+
+    print_inorder(node->left);
+    printf("Name: %s phoneNumber: %s\n", node->name, node->phoneNum);
+    print_inorder(node->right);
 }
