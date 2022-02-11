@@ -1,7 +1,7 @@
 #include "queue.h"
 #include <stdio.h>
 
-static double  _queue[MAX_Q_SIZE];
+static double  _queue[MAX_Q_SIZE]; // equals to 10
 static int _front = 0, _rear = 0;
 
 void enq(double  data) {
