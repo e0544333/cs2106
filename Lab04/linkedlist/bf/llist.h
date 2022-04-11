@@ -1,6 +1,6 @@
 
 // Uncomment the next line to enable debug printing
-#define DEBUG       // Enable debug printing
+#define DEBUG // Enable debug printing
 
 // The debug printer; used like a normal printf, except
 // that printing can be turned off by commenting out the
@@ -12,21 +12,26 @@ void dbprintf(char *format, ...);
 // memory manager. You can delete the
 // val field. It is only used for testlist.c
 
-typedef struct td {
-    int val;
+typedef struct td
+{
+    void *ptr;
+    int start;       // store the index to the memory segment in heap
+    int is_occupied; // 1 = occupied, 0 = hole
+    long size;       // store the size of the chunk. Use this variable to calculate the length
+    int mem_left;
 } TData;
 
-
-/* ----------------------------------------- 
+/* -----------------------------------------
    BASIC ROUTINES
 
    Basic linked list routines
 
    ---------------------------------------- */
 
-// Basic double linked list node. 
+// Basic double linked list node.
 
-typedef struct tn {
+typedef struct tn
+{
     unsigned int key;
     TData *pdata; // Pointer to the data you want to store
 
@@ -35,18 +40,17 @@ typedef struct tn {
     struct tn *prev;
     struct tn *next;
 } TNode;
-
 // Insert Direction
-#define ASCENDING   0
-#define DESCENDING  1
+#define ASCENDING 0
+#define DESCENDING 1
 
 // Merge direction
-#define PRECEDING   0
-#define SUCCEEDING  1
+#define PRECEDING 0
+#define SUCCEEDING 1
 
 // Traverser position
-#define FRONT       0
-#define REAR        1
+#define FRONT 0
+#define REAR 1
 
 // Create a new node. You need to
 // Create your own TData node, populate
@@ -67,7 +71,6 @@ TNode *make_node(unsigned int key, TData *data);
 // dir = 1: Insert in descending order
 
 void insert_node(TNode **llist, TNode *node, int dir);
-
 
 // Remove a given node from the linked list
 void delete_node(TNode **llist, TNode *node);
@@ -90,7 +93,7 @@ void merge_node(TNode *llist, TNode *node, int dir);
 // struct yourself.
 void purge_list(TNode **llist);
 
-/* ----------------------------------------- 
+/* -----------------------------------------
    TRAVERSAL ROUTINES
 
    Lets you traverse the linked list

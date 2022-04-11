@@ -17,7 +17,7 @@ typedef struct td
     void *ptr;
     int start;       // store the index to the memory segment in heap
     int is_occupied; // 1 = occupied, 0 = hole
-    long size;       // store the size of the chunk. Use this variable to calculate the length
+    long size;        // store the size of the chunk. Use this variable to calculate the length
     int mem_left;
 } TData;
 

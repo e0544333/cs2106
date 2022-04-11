@@ -151,20 +151,22 @@ TNode *find_node(TNode *llist, unsigned int key) {
 // dir = 0: Merge with node before
 // dir = 1: Merge with node after
 
-void merge_node(TNode *llist, TNode *node, int dir) {
-    if(dir == 0) {
-        if(node->prev == NULL)
+void merge_node(TNode *llist, TNode *node, int dir)
+{
+    if (dir == 0)
+    {
+        if (node->prev == NULL)
             return;
-
+        node->prev->pdata->size = node->prev->pdata->size + node->pdata->size;
         delete_node(&llist, node);
     }
-    else 
-        if(dir == 1) {
-            if(node->next == NULL)
-                return;
-
-            delete_node(&llist, node->next);
-        }
+    else if (dir == 1)
+    {
+        if (node->next == NULL)
+            return;
+        node->pdata->size = node->next->pdata->size + node->pdata->size;
+        delete_node(&llist, node->next);
+    }
 }
 
 // Go over every element of llist, and call func
